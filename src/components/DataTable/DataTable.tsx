@@ -1,4 +1,16 @@
 import { DataGrid, GridColDef, GridValueGetterParams } from '@material-ui/data-grid'
+import { useState } from 'react';
+import { server_calls } from '../../api';
+import { useGetData } from '../../custom-hooks';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle } from '@material-ui/core';
+import { CharacterForm } from '../../components/CharacterForm';
+
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 100 },
@@ -38,8 +50,8 @@ const rows = [
     bio: "Eccentric boy, born Kakarot. A Saiyan, sent to Earth, trained to be Earth's greatest warrior.",
     phys_app: 'Muscular, good-natured male', universe: 'Dragon Ball' 
     },
-    { id: 3, name: 'Vito Corleone', description: 'Patriarch of the Corleone crime family, powerful mob boss.', 
-    bio: 'Forced to the move to New York, USA from Italy as a boy. Went on to build the most powerful crime family in the United States.', 
+    { id: 3, name: 'Vito Corleone', description: 'Patriarch of the Corleone crime family', 
+    bio: 'Forced to move to New York from Italy as a boy. Went on to build the most powerful crime family in the United States.', 
     phys_app: null, universe: 'The Godfather' 
     },
     { id: 4, name: 'Harry Potter', description: 'The Boy Who Lived', 
@@ -56,11 +68,53 @@ const rows = [
     },
 ];
 
+interface gridData{
+    data:{
+        id?:string;
+    }
+}
 export const DataTable = () =>{
+    let { characterData, getData } = useGetData();
+    let [open, setOpen] = useState(false);
+    let [gridData, setData] = useState<gridData>({data:{}});
+    const [selectionModel, setSelectionModel] = useState<any>([]);
+
+
+    let handleOpen = () => {
+        setOpen(true)
+    }
+    let handleClose = () => {
+        setOpen(false)
+    }
+    let deleteData = () => {
+        server_calls.delete(selectionModel)
+        getData()
+    }
     return (
         <div style={{ height: 400, width: '100%' }} >
             <h2>Characters in Inventory</h2>
-            <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+            <DataGrid 
+						rows={rows} 
+						columns={columns} 
+						pageSize={5} 
+						checkboxSelection 
+						onSelectionModelChange = {(item) => {setSelectionModel(item)
+                        }}
+						{...characterData}  
+					/>
+        <Button onClick={handleOpen}>Update</Button>
+        <Button variant="contained" color="secondary" onClick={deleteData}>Delete</Button>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Update A Character</DialogTitle>
+                <DialogContent>
+            <DialogContentText>Character id: {selectionModel}</DialogContentText>
+                <CharacterForm id={`${selectionModel}`}/>
+                </DialogContent>
+            <DialogActions>
+                <Button onClick = {handleClose} color="primary">Cancel</Button>
+                <Button onClick = {handleClose} color = "primary">Done</Button> 
+            </DialogActions>
+        </Dialog>
         </div>
-    )
+    );
 }
