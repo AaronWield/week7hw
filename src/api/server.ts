@@ -8,7 +8,7 @@ export const server_calls = {
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': `Bearer ${token}`
-            }
+            },
         });
         if (!response.ok){
             throw new Error('Failed to fetch your data from the server...')
@@ -27,7 +27,7 @@ export const server_calls = {
         if (!response.ok){
             throw new Error('Failed to create your character...')
         }
-        return response.json()
+        return await response.json()
     },
     update: async (id: string, data: any = {}) => {
         const response = await fetch (`https://week5project.herokuapp.com/api/chars/${id}`, {
@@ -44,7 +44,7 @@ export const server_calls = {
         return await response.json()
     },
     delete: async(id:string) => {
-        const response = await fetch(`https://week5project.herokuapp.com/api/chars${id}`, {
+        const response = await fetch(`https://week5project.herokuapp.com/api/chars/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

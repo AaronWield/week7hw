@@ -1,3 +1,4 @@
+import { DataTable, CharacterForm } from '../../components';
 import { Drawer as MUIDrawer,
     ListItem,
     List,
@@ -27,7 +28,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import clsx from 'clsx';
 import { useState } from 'react';
 import { RouteComponentProps, withRouter, Switch, Route } from 'react-router';
-import { DataTable, CharacterForm } from '../../components';
+
 
 const drawerWidth = 240; // width for sideNav drawer
 const useStyles = makeStyles((theme: Theme) =>
@@ -129,8 +130,8 @@ export const Dashboard = withRouter((props:DashProps) =>{
             onClick: () => history.push('/')
         },
         {
-            text: 'Sign In',
-            onclick: () => history.push('/signin')
+            text: 'Sign Out',
+            onClick: () => history.push('/signin')
         },
     ];
 
@@ -167,7 +168,8 @@ export const Dashboard = withRouter((props:DashProps) =>{
                             <Button onClick = {handleDialogClickClose} color="primary">Cancel</Button>
                             <Button onClick={handleDialogClickClose} color = "primary">Done</Button> 
                         </DialogActions>
-                    </Dialog>                </Toolbar>
+                    </Dialog>                
+                </Toolbar>
             </AppBar>
             <MUIDrawer 
                 className={classes.drawer}

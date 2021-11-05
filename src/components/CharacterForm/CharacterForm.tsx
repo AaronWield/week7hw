@@ -22,17 +22,17 @@ export const CharacterForm = (props:CharacterFormProps) => {
     const name = useSelector<CharacterState>(state => state.name)
     const { register, handleSubmit } = useForm({ })
 
-    const onSubmit = (data:any, event:any) => {
+    const onSubmit = async (data:any, event:any) => {
         console.log(props.id)
 
-        if( props.id!){
-            server_calls.update(props.id!, data)
-            console.log(`Updated:${data} ${props.id}`)
+        if(props.id!){
+            await server_calls.update(props.id!, data)
+            console.log(`Updated: ${data} ${props.id}`)
             window.location.reload()
             event.target.reset();
         } else {
             dispatch(chooseName(data.name))
-            server_calls.create(store.getState())
+            await server_calls.create(store.getState())
             window.location.reload()
         }
     }
@@ -52,8 +52,8 @@ export const CharacterForm = (props:CharacterFormProps) => {
                     <Input {...register('biography')} name="biography" placeholder="Biography"/>
                 </div>
                 <div>
-                    <label htmlFor="phys_app">Physical Appearance</label>
-                    <Input {...register('phys_app')} name="phys_app" placeholder="Physical Appearance"/>
+                    <label htmlFor="physical_appearance">Physical Appearance</label>
+                    <Input {...register('physical_appearance')} name="physical_appearance" placeholder="Physical Appearance"/>
                 </div>
                 <div>
                     <label htmlFor="universe">Universe</label>

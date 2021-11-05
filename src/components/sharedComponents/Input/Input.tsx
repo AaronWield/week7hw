@@ -15,7 +15,6 @@ export const Input = forwardRef((props:inputType, ref) => {
         fullWidth
         type='text'
         {...props}
-        >
-        </TextField>
+        ></TextField>
     );
 });
